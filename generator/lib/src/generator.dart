@@ -605,7 +605,7 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
                       '(dynamic i) => ${_displayString(innerReturnType)}.fromJson(i as Map<String,dynamic>,${_getInnerJsonSerializableMapperFn(innerReturnType)})');
                 } else {
                   mapperCode = refer(
-                      '(dynamic i) => i == null ? null : ${_displayString(innerReturnType)}.fromJson(i as Map<String,dynamic>)');
+                      '(dynamic i) => ${_displayString(innerReturnType)}.fromJson(i as Map<String,dynamic>)');
                 }
                 break;
               case retrofit.Parser.DartJsonMapper:
