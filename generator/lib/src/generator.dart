@@ -1396,15 +1396,23 @@ You should create a new class to encapsulate the response.
         switch (clientAnnotation.parser) {
           case retrofit.Parser.JsonSerializable:
           case retrofit.Parser.DartJsonMapper:
-            blocks.add(
-              declareFinal(_dataVar)
-                  .assign(
-                    refer('''
-            ${_bodyName.displayName}.map((e) => e.toJson()).toList()
-            '''),
-                  )
-                  .statement,
-            );
+            final innerReturnType = _getResponseInnerType(_bodyName.type);
+            final genericArgumentFactories =
+                isGenericArgumentFactories(innerReturnType);
+            var typeArgs = innerReturnType is ParameterizedType
+                ? innerReturnType.typeArguments
+                : [];
+            if (typeArgs.length > 0 &&
+                genericArgumentFactories &&
+                innerReturnType != null) {
+              blocks.add(refer('''
+                  ${_bodyName.displayName}.map((e) => e.toJson(${_getInnerJsonDeSerializableMapperFn(innerReturnType)})).toList()
+                ''').assignFinal(_dataVar).statement);
+            } else {
+              blocks.add(refer('''
+                  ${_bodyName.displayName}.map((e) => e.toJson()).toList()
+                ''').assignFinal(_dataVar).statement);
+            }
             break;
           case retrofit.Parser.MapSerializable:
             blocks.add(
