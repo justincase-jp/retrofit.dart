@@ -1400,7 +1400,7 @@ if (T != dynamic &&
         switch (clientAnnotation.parser) {
           case retrofit.Parser.JsonSerializable:
           case retrofit.Parser.DartJsonMapper:
-            final innerReturnType = _getResponseInnerType(_bodyName.type);
+            final innerReturnType = _getResponseInnerType(bodyName.type);
             final genericArgumentFactories =
             isGenericArgumentFactories(innerReturnType);
             var typeArgs = innerReturnType is ParameterizedType
@@ -1410,11 +1410,11 @@ if (T != dynamic &&
                 genericArgumentFactories &&
                 innerReturnType != null) {
               blocks.add(refer('''
-                    ${_bodyName.displayName}.map((e) => e.toJson(${_getInnerJsonDeSerializableMapperFn(innerReturnType)})).toList()
+                    ${bodyName.displayName}.map((e) => e.toJson(${_getInnerJsonDeSerializableMapperFn(innerReturnType)})).toList()
                   ''').assignFinal(_dataVar).statement);
             } else {
               blocks.add(refer('''
-                    ${_bodyName.displayName}.map((e) => e.toJson()).toList()
+                    ${bodyName.displayName}.map((e) => e.toJson()).toList()
                   ''').assignFinal(_dataVar).statement);
             }
             break;
