@@ -4,34 +4,46 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
 import 'package:source_gen_test/annotations.dart';
 
-@ShouldGenerate(r'''
+@ShouldGenerate(
+  '''
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _RestClient implements RestClient {
-  _RestClient(this._dio, {this.baseUrl});
+  _RestClient(
+    this._dio, {
+    this.baseUrl,
+  });
 
   final Dio _dio;
 
   String? baseUrl;
-''', contains: true)
+''',
+  contains: true,
+)
 @RestApi()
 abstract class RestClient {}
 
-@ShouldGenerate(r'''
+@ShouldGenerate(
+  '''
 class _BaseUrl implements BaseUrl {
-  _BaseUrl(this._dio, {this.baseUrl}) {
+  _BaseUrl(
+    this._dio, {
+    this.baseUrl,
+  }) {
     baseUrl ??= 'http://httpbin.org/';
   }
 
   final Dio _dio;
 
   String? baseUrl;
-''', contains: true)
-@RestApi(baseUrl: "http://httpbin.org/")
+''',
+  contains: true,
+)
+@RestApi(baseUrl: 'http://httpbin.org/')
 abstract class BaseUrl {}
 
 @ShouldGenerate(
-  r'''
+  '''
     const _extra = <String, dynamic>{};
 ''',
   contains: true,
@@ -44,9 +56,9 @@ abstract class EmptyExtras {
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     const _extra = <String, dynamic>{'key': 'value'};
-''',
+  ''',
   contains: true,
 )
 @RestApi()
@@ -57,9 +69,12 @@ abstract class ExtrasWithPrimitiveValues {
 }
 
 @ShouldGenerate(
-  r'''
-    const _extra = <String, dynamic>{'key': 'value', 'key2': 'value2'};
-''',
+  '''
+    const _extra = <String, dynamic>{
+      'key': 'value',
+      'key2': 'value2',
+    };
+  ''',
   contains: true,
 )
 @RestApi()
@@ -71,7 +86,7 @@ abstract class MultipleExtrasWithPrimitiveValues {
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     const _extra = <String, dynamic>{'key': CustomConstant()};
 ''',
   contains: true,
@@ -88,7 +103,7 @@ class CustomConstant {
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _headers = <String, dynamic>{};
 ''',
   contains: true,
@@ -101,7 +116,7 @@ abstract class EmptyHeaders {
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _headers = <String, dynamic>{r'key': 'value'};
 ''',
   contains: true,
@@ -109,167 +124,192 @@ abstract class EmptyHeaders {
 @RestApi()
 abstract class HeadersWithPrimitiveValues {
   @GET('/list/')
-  @Headers({'key': 'value'})
+  @Headers(<String, dynamic>{'key': 'value'})
   Future<void> list();
 }
 
 @ShouldGenerate(
-  r'''
-    final _headers = <String, dynamic>{r'key': 'value', r'key2': 'value2'};
-''',
+  '''
+    final _headers = <String, dynamic>{
+      r'key': 'value',
+      r'key2': 'value2',
+    };
+  ''',
   contains: true,
 )
 @RestApi()
 abstract class MultipleHeadersWithPrimitiveValues {
   @GET('/list/')
-  @Headers({'key': 'value'})
-  @Headers({'key2': 'value2'})
+  @Headers(<String, dynamic>{'key': 'value'})
+  @Headers(<String, dynamic>{'key2': 'value2'})
   Future<void> list();
 }
 
 @ShouldGenerate(
-  r'''Options(method: 'GET',''',
+  '''
+Options(
+      method: 'GET',
+  ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpGetTest {
-  @GET("/get")
+  @GET('/get')
   Future<String> ip();
 }
 
 @ShouldGenerate(
-  r'''Options(method: 'POST',''',
+  '''
+Options(
+      method: 'POST',
+  ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpPostTest {
-  @POST("/post")
+  @POST('/post')
   Future<String> ip();
 }
 
 @ShouldGenerate(
-  r'''Options(method: 'PUT',''',
+  '''
+Options(
+      method: 'PUT',
+  ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpPutTest {
-  @PUT("/put")
+  @PUT('/put')
   Future<String> ip();
 }
 
 @ShouldGenerate(
-  r'''Options(method: 'DELETE',''',
+  '''
+Options(
+      method: 'DELETE',''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpDeleteTest {
-  @DELETE("/delete")
+  @DELETE('/delete')
   Future<String> ip();
 }
 
 @ShouldGenerate(
-  r'''Options(method: 'PATCH',''',
+  '''
+Options(
+      method: 'PATCH',
+''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class HttpPatchTest {
-  @PATCH("/delete")
+  @PATCH('/delete')
   Future<String> ip();
 }
 
 @ShouldGenerate(
-  r"contentType: 'application/x-www-form-urlencoded'",
+  "contentType: 'application/x-www-form-urlencoded'",
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class FormUrlEncodedTest {
-  @POST("/get")
+  @POST('/get')
   @FormUrlEncoded()
   Future<String> ip();
 }
 
 @ShouldGenerate(
-  r"contentType: 'multipart/form-data'",
+  "contentType: 'multipart/form-data'",
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class MultipartTest {
-  @POST("/get")
+  @POST('/get')
   @MultiPart()
   Future<String> ip();
 }
 
 @ShouldThrow('Two content-type annotation on one request ip', element: false)
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TwoContentTypeAnnotationOnSameMethodTest {
-  @POST("/get")
+  @POST('/get')
   @MultiPart()
   @FormUrlEncoded()
   Future<String> ip();
 }
 
 @ShouldGenerate(
-  r"/image/${imageType.name}/${id}_XL.png",
+  r'/image/${imageType.name}/${id}_XL.png',
   contains: true,
 )
 @RestApi()
 abstract class PathTest {
-  @GET("/image/{imageType}/{id}_XL.png")
-  Future<HttpResponse> getImage(@Path('imageType') ImageType imageType, @Path('id') String id);
+  @GET('/image/{imageType}/{id}_XL.png')
+  Future<HttpResponse<dynamic>> getImage(
+    @Path('imageType') ImageType imageType,
+    @Path('id') String id,
+  );
 }
 
-enum ImageType {
-  icon, large  
-}
+enum ImageType { icon, large }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = FormData();
     _data.files.add(MapEntry(
-        'image',
-        MultipartFile.fromFileSync(image.path,
-            filename: image.path.split(Platform.pathSeparator).last)));
+      'image',
+      MultipartFile.fromFileSync(
+        image.path,
+        filename: image.path.split(Platform.pathSeparator).last,
+      ),
+    ));
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class FilePartTest {
-  @POST("/profile")
+  @POST('/profile')
   Future<String> setProfile(@Part() File image);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = FormData();
     _data.files.add(MapEntry(
-        'image',
-        MultipartFile.fromFileSync(image.path,
-            filename: 'my_profile_image.jpg')));
+      'image',
+      MultipartFile.fromFileSync(
+        image.path,
+        filename: 'my_profile_image.jpg',
+      ),
+    ));
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class FilePartWithCustomNameTest {
-  @POST("/profile")
+  @POST('/profile')
   Future<String> setProfile(
-      @Part(name: 'image', fileName: 'my_profile_image.jpg') File image);
+    @Part(name: 'image', fileName: 'my_profile_image.jpg') File image,
+  );
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = FormData();
     _data.files.addAll(images.map((i) => MapEntry('images', i)));
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class FilePartWithMultipartListTest {
-  @POST("/profile")
+  @POST('/profile')
   Future<String> setProfile(@Part() List<MultipartFile> images);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = FormData();
     if (images != null) {
       _data.files.addAll(images.map((i) => MapEntry('images', i)));
@@ -277,124 +317,115 @@ abstract class FilePartWithMultipartListTest {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class FilePartWithNullableMultipartListTest {
-  @POST("/profile")
+  @POST('/profile')
   Future<String> setProfile(@Part() List<MultipartFile>? images);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = FormData();
     _data.files.add(MapEntry(
-        'image',
-        MultipartFile.fromFileSync(image.path,
-            filename: image.path.split(Platform.pathSeparator).last)));
-''',
+      'image',
+      MultipartFile.fromFileSync(
+        image.path,
+        filename: image.path.split(Platform.pathSeparator).last,
+      ),
+    ));
+  ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class UploadFileInfoPartTest {
-  @POST("/profile")
+  @POST('/profile')
   Future<String> setProfile(@Part() File image);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = User.fromJson(_result.data!);
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class GenericCast {
-  @POST("/users/1")
+  @POST('/users/1')
   Future<User> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data == null ? null : User.fromJson(_result.data!);
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class NullableGenericCast {
-  @POST("/users/1")
+  @POST('/users/1')
   Future<User?> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     yield value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class StreamReturnType {
-  @POST("/users/1")
+  @POST('/users/1')
   Stream<User> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
   Stream<User> getUser() async* {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class StreamReturnModifier {
-  @POST("/users/1")
+  @POST('/users/1')
   Stream<User> getUser();
 }
 
 class User implements AbstractUser {
   User();
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User();
-  }
+  factory User.fromJson(Map<String, dynamic> json) => User();
 
-  Map<String, dynamic> toJson() {
-    return {};
-  }
+  @override
+  Map<String, dynamic> toJson() => <String, dynamic>{};
 }
 
 @JsonSerializable(genericArgumentFactories: true)
 class GenericUser<T> implements AbstractUser {
   GenericUser();
 
-  factory GenericUser.fromJson(
-      Map<String, dynamic> json, T Function(Object json) fromJsonT) {
-    return GenericUser<T>();
-  }
+  factory GenericUser.fromJson() => GenericUser<T>();
 
-  Map<String, dynamic> toJson() {
-    return {};
-  }
+  @override
+  Map<String, dynamic> toJson() => <String, dynamic>{};
 }
 
 @JsonSerializable(genericArgumentFactories: false)
 class GenericUserWithoutGenericArgumentFactories<T> implements AbstractUser {
   GenericUserWithoutGenericArgumentFactories();
 
-  factory GenericUserWithoutGenericArgumentFactories.fromJson(
-      Map<String, dynamic> json, T Function(Object json) fromJsonT) {
-    return GenericUserWithoutGenericArgumentFactories<T>();
-  }
+  factory GenericUserWithoutGenericArgumentFactories.fromJson() =>
+      GenericUserWithoutGenericArgumentFactories<T>();
 
-  Map<String, dynamic> toJson() {
-    return {};
-  }
+  @override
+  Map<String, dynamic> toJson() => <String, dynamic>{};
 }
 
 class JsonSerializable {
-  final bool genericArgumentFactories;
+  const JsonSerializable({required this.genericArgumentFactories});
 
-  const JsonSerializable({
-    required this.genericArgumentFactories,
-  });
+  final bool genericArgumentFactories;
 }
 
 mixin AbstractUserMixin {
@@ -411,85 +442,85 @@ abstract class AbstractUser with AbstractUserMixin {
 Map<String, dynamic> serializeUser(User object) => object.toJson();
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data!;
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class GenericCastBasicType {
-  @POST("/users/1")
+  @POST('/users/1')
   Future<String> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data;
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class NullableGenericCastBasicType {
-  @POST("/users/1")
+  @POST('/users/1')
   Future<String?> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = <String, dynamic>{};
     _data.addAll(user.toJson());
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestObjectBody {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(@Body() User user);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = <String, dynamic>{};
     _data.addAll(user?.toJson() ?? <String, dynamic>{});
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestObjectBodyNullable {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser({@Body() User? user});
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = <String, dynamic>{};
     _data.addAll(user.toJson());
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestAbstractObjectBody {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(@Body() AbstractUser user);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = <String, dynamic>{};
     _data.addAll(user?.toJson() ?? <String, dynamic>{});
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestAbstractObjectBodyNullable {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser({@Body() AbstractUser? user});
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final queryParameters = <String, dynamic>{r'u': u.toJson()};
     queryParameters.addAll(user1.toJson());
     queryParameters.addAll(user2.toJson());
@@ -497,47 +528,53 @@ abstract class TestAbstractObjectBodyNullable {
   contains: true,
 )
 @ShouldGenerate(
-  r'''
+  '''
     final queryParameters = <String, dynamic>{r'u': u.toJson()};
     queryParameters.addAll(user3?.toJson() ?? <String, dynamic>{});
     queryParameters.addAll(user4?.toJson() ?? <String, dynamic>{});
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestObjectQueries {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(
-      @Query('u') User u, @Queries() User user1, @Queries() User user2);
+    @Query('u') User u,
+    @Queries() User user1,
+    @Queries() User user2,
+  );
 
-  @POST("/users")
-  Future<String> createNullableUser(@Query('u') User u,
-      {@Queries() User? user3, @Queries() User? user4});
+  @POST('/users')
+  Future<String> createNullableUser(
+    @Query('u') User u, {
+    @Queries() User? user3,
+    @Queries() User? user4,
+  });
 }
 
 class CustomObject {
-  final String id;
-
   CustomObject(this.id);
+
+  final String id;
 }
 
 @ShouldGenerate(
-    r'''
+  '''
     final _data = customObject;
 ''',
-    contains: true,
-    expectedLogItems: [
-      "CustomObject must provide a `toJson()` method which return a Map.\n"
-          "It is programmer's responsibility to make sure the CustomObject is properly serialized",
-    ])
-@RestApi(baseUrl: "https://httpbin.org/")
+  contains: true,
+  expectedLogItems: [
+    "CustomObject must provide a `toJson()` method which return a Map.\nIt is programmer's responsibility to make sure the CustomObject is properly serialized",
+  ],
+)
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestCustomObjectBody {
-  @POST("/custom-object")
+  @POST('/custom-object')
   Future<String> createCustomObject(@Body() CustomObject customObject);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data!.map((k, dynamic v) => MapEntry(
         k,
         (v as List)
@@ -547,14 +584,14 @@ abstract class TestCustomObjectBody {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestMapBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, List<User>>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data?.map((k, dynamic v) => MapEntry(
         k,
         (v as List)
@@ -564,219 +601,245 @@ abstract class TestMapBody {
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class NullableTestMapBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, List<User>>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data!.map((k, dynamic v) =>
         MapEntry(k, User.fromJson(v as Map<String, dynamic>)));
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestMapBody2 {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, User>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data?.map((k, dynamic v) =>
         MapEntry(k, User.fromJson(v as Map<String, dynamic>)));
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class NullableTestMapBody2 {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, User>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data!.cast<String>();
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestBasicListString {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<String>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data?.cast<String>();
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class NullableTestBasicListString {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<String>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data!.cast<bool>();
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestBasicListBool {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<bool>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data?.cast<bool>();
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class NullableTestBasicListBool {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<bool>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data!.cast<int>();
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestBasicListInt {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<int>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data?.cast<int>();
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class NullableTestBasicListInt {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<int>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data!.cast<double>();
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestBasicListDouble {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<double>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data?.cast<double>();
     return value;
 ''',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class NullableTestBasicListDouble {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<double>?> getResult();
 }
 
 @ShouldGenerate(
-  "cancelToken: cancelToken",
+  'cancelToken: cancelToken',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestCancelToken {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(
-      @Body() User user, @CancelRequest() CancelToken cancelToken);
+    @Body() User user,
+    @CancelRequest() CancelToken cancelToken,
+  );
 }
 
 @ShouldGenerate(
-  "onSendProgress: onSendProgress",
+  'onSendProgress: onSendProgress',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestSendProgress {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(
-      @Body() User user, @SendProgress() ProgressCallback onSendProgress);
+    @Body() User user,
+    @SendProgress() ProgressCallback onSendProgress,
+  );
 }
 
 @ShouldGenerate(
-  "onReceiveProgress: onReceiveProgress",
+  'onReceiveProgress: onReceiveProgress',
   contains: true,
 )
-@RestApi(baseUrl: "https://httpbin.org/")
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestReceiveProgress {
-  @POST("/users")
+  @POST('/users')
   Future<String> createUser(
-      @Body() User user, @ReceiveProgress() ProgressCallback onReceiveProgress);
+    @Body() User user,
+    @ReceiveProgress() ProgressCallback onReceiveProgress,
+  );
 }
 
-@ShouldGenerate(r'''Options(method: 'HEAD',''', contains: true)
-@RestApi(baseUrl: "https://httpbin.org/")
+@ShouldGenerate(
+  '''
+Options(
+      method: 'HEAD',''',
+  contains: true,
+)
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestHeadMethod {
-  @HEAD("/")
+  @HEAD('/')
   Future<String> testHeadMethod();
 }
 
-@ShouldGenerate(r'''Options(method: 'OPTIONS',''', contains: true)
-@RestApi(baseUrl: "https://httpbin.org/")
+@ShouldGenerate(
+  '''
+Options(
+      method: 'OPTIONS',''',
+  contains: true,
+)
+@RestApi(baseUrl: 'https://httpbin.org/')
 abstract class TestOptionsMethod {
-  @OPTIONS("/")
+  @OPTIONS('/')
   Future<String> testOptionsMethod();
 }
 
-@ShouldGenerate(r'''
+@ShouldGenerate(
+  '''
     final httpResponse = HttpResponse(null, _result);
-''', contains: true)
+''',
+  contains: true,
+)
 @RestApi()
 abstract class TestHttpResponseVoid {
-  @GET("/")
+  @GET('/')
   Future<HttpResponse<void>> noResponseData();
 }
 
-@ShouldGenerate(r'''
+@ShouldGenerate(
+  '''
     final httpResponse = HttpResponse(value, _result);
-''', contains: true)
+''',
+  contains: true,
+)
 @RestApi()
 abstract class TestHttpResponseObject {
-  @GET("/")
+  @GET('/')
   Future<HttpResponse<Map<String, dynamic>>> responseWithObject();
 }
 
-@ShouldGenerate(r'''
+@ShouldGenerate(
+  '''
     final httpResponse = HttpResponse(value, _result);
-''', contains: true)
+''',
+  contains: true,
+)
 @RestApi()
 abstract class TestHttpResponseArray {
-  @GET("/")
+  @GET('/')
   Future<HttpResponse<List<String>>> responseWithArray();
 }
 
-@ShouldGenerate(r'''
+@ShouldGenerate(
+  '''
     final _data = FormData();
     _data.files.addAll(files.map((i) => MapEntry(
         'files',
@@ -784,8 +847,11 @@ abstract class TestHttpResponseArray {
           i.path,
           filename: i.path.split(Platform.pathSeparator).last,
         ))));
-''', contains: true)
-@ShouldGenerate(r'''
+''',
+  contains: true,
+)
+@ShouldGenerate(
+  '''
     final _data = FormData();
     if (files != null) {
       _data.files.addAll(files.map((i) => MapEntry(
@@ -795,66 +861,107 @@ abstract class TestHttpResponseArray {
             filename: i.path.split(Platform.pathSeparator).last,
           ))));
     }
-''', contains: true)
-@ShouldGenerate(r'''
+''',
+  contains: true,
+)
+@ShouldGenerate(
+  '''
     if (file != null) {
       _data.files.add(MapEntry(
-          'file',
-          MultipartFile.fromFileSync(file.path,
-              filename: file.path.split(Platform.pathSeparator).last)));
+        'file',
+        MultipartFile.fromFileSync(
+          file.path,
+          filename: file.path.split(Platform.pathSeparator).last,
+        ),
+      ));
     }
-''', contains: true)
+''',
+  contains: true,
+)
 @RestApi()
 abstract class TestFileList {
-  @POST("/")
+  @POST('/')
   Future<void> testFileList(@Part() List<File> files);
 
-  @POST("/")
+  @POST('/')
   Future<void> testOptionalFileList(@Part() List<File>? files);
 
-  @POST("/")
+  @POST('/')
   Future<void> testOptionalFile({@Part() File file});
 }
 
-@ShouldGenerate(r'''
+@ShouldGenerate(
+  '''
     final _data = FormData();
-    _data.fields.add(MapEntry('users', jsonEncode(users)));
-''', contains: true)
-@ShouldGenerate(r'''
+    _data.fields.add(MapEntry(
+      'users',
+      jsonEncode(users),
+    ));
+    ''',
+  contains: true,
+)
+@ShouldGenerate(
+  '''
     final _data = FormData();
-    _data.fields.add(MapEntry('item', jsonEncode(user)));
-    ''', contains: true)
-@ShouldGenerate(r'''
+    _data.fields.add(MapEntry(
+      'item',
+      jsonEncode(user),
+    ));
+    ''',
+  contains: true,
+)
+@ShouldGenerate(
+  '''
     mapList.forEach((i) {
       _data.fields.add(MapEntry('mapList', jsonEncode(i)));
     });
-    ''', contains: true)
-@ShouldGenerate(r'''
+    ''',
+  contains: true,
+)
+@ShouldGenerate(
+  '''
     final _data = FormData.fromMap(map);
-''', contains: true)
-@ShouldGenerate(r'''
-    _data.fields.add(MapEntry('a', a.toString()));
-    _data.fields.add(MapEntry('b', b.toString()));
-    _data.fields.add(MapEntry('c', c.toString()));
+    ''',
+  contains: true,
+)
+@ShouldGenerate(
+  '''
+    _data.fields.add(MapEntry(
+      'a',
+      a.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'b',
+      b.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'c',
+      c.toString(),
+    ));
     if (d != null) {
-      _data.fields.add(MapEntry('d', d));
+      _data.fields.add(MapEntry(
+        'd',
+        d,
+      ));
     }
-''', contains: true)
+    ''',
+  contains: true,
+)
 @RestApi()
 abstract class TestModelList {
-  @POST("/")
+  @POST('/')
   Future<void> testUserList(@Part() List<User> users);
 
-  @POST("/")
-  Future<void> testUser(@Part(name: "item") User user);
+  @POST('/')
+  Future<void> testUser(@Part(name: 'item') User user);
 
-  @POST("/")
+  @POST('/')
   Future<void> testListMap(@Part() List<Map<String, dynamic>> mapList);
 
-  @POST("/")
+  @POST('/')
   Future<void> testMap(@Part() Map<String, dynamic> map);
 
-  @POST("/")
+  @POST('/')
   Future<void> testBasicType(
     @Part() int a,
     @Part() bool b,
@@ -863,7 +970,8 @@ abstract class TestModelList {
   });
 }
 
-@ShouldGenerate(r'''
+@ShouldGenerate(
+  '''
   RequestOptions newRequestOptions(Object? options) {
     if (options is RequestOptions) {
       return options as RequestOptions;
@@ -888,43 +996,48 @@ abstract class TestModelList {
     }
     return RequestOptions(path: '');
   }
-''', contains: true)
-@ShouldGenerate(r'''
+''',
+  contains: true,
+)
+@ShouldGenerate(
+  '''
     final newOptions = newRequestOptions(options);
     newOptions.extra.addAll(_extra);
     newOptions.headers.addAll(_dio.options.headers);
     newOptions.headers.addAll(_headers);
     await _dio.fetch<void>(newOptions.copyWith(
-        method: 'GET',
-        baseUrl: baseUrl ?? _dio.options.baseUrl,
-        queryParameters: queryParameters,
-        path: '')
-      ..data = _data);
-    ''', contains: true)
+      method: 'GET',
+      baseUrl: baseUrl ?? _dio.options.baseUrl,
+      queryParameters: queryParameters,
+      path: '',
+    )..data = _data);
+  ''',
+  contains: true,
+)
 @RestApi()
 abstract class CustomOptions {
-  @GET("")
+  @GET('')
   Future<void> testOptions(@DioOptions() Options options);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = JsonMapper.fromMap<User>(_result.data!)!;
     return value;
 ''',
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.DartJsonMapper,
 )
 abstract class JsonMapperGenericCast {
-  @POST("/xx")
+  @POST('/xx')
   Future<User> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value =
         _result.data == null ? null : JsonMapper.fromMap<User>(_result.data!)!;
     return value;
@@ -932,16 +1045,16 @@ abstract class JsonMapperGenericCast {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.DartJsonMapper,
 )
 abstract class NullableJsonMapperGenericCast {
-  @POST("/xx")
+  @POST('/xx')
   Future<User?> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data!
         .map(
             (dynamic i) => JsonMapper.fromMap<User>(i as Map<String, dynamic>)!)
@@ -951,16 +1064,16 @@ abstract class NullableJsonMapperGenericCast {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.DartJsonMapper,
 )
 abstract class JsonMapperTestListBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<User>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data!.map((k, dynamic v) => MapEntry(
         k,
         (v as List)
@@ -971,16 +1084,16 @@ abstract class JsonMapperTestListBody {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.DartJsonMapper,
 )
 abstract class JsonMapperTestMapBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, List<User>>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data!.map((k, dynamic v) =>
         MapEntry(k, JsonMapper.fromMap<User>(v as Map<String, dynamic>)!));
     return value;
@@ -988,48 +1101,48 @@ abstract class JsonMapperTestMapBody {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.DartJsonMapper,
 )
 abstract class JsonMapperTestMapBody2 {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, User>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = User.fromMap(_result.data!);
     return value;
 ''',
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.MapSerializable,
 )
 abstract class MapSerializableGenericCast {
-  @POST("/xx")
+  @POST('/xx')
   Future<User> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data == null ? null : User.fromMap(_result.data!);
     return value;
 ''',
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.MapSerializable,
 )
 abstract class NullableMapSerializableGenericCast {
-  @POST("/xx")
+  @POST('/xx')
   Future<User?> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data!
         .map((dynamic i) => User.fromMap(i as Map<String, dynamic>))
         .toList();
@@ -1038,16 +1151,16 @@ abstract class NullableMapSerializableGenericCast {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.MapSerializable,
 )
 abstract class MapSerializableTestListBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<User>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data
         ?.map((dynamic i) => User.fromMap(i as Map<String, dynamic>))
         .toList();
@@ -1056,16 +1169,16 @@ abstract class MapSerializableTestListBody {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.MapSerializable,
 )
 abstract class NullableMapSerializableTestListBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<User>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data!.map((k, dynamic v) => MapEntry(
         k,
         (v as List)
@@ -1076,16 +1189,16 @@ abstract class NullableMapSerializableTestListBody {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.MapSerializable,
 )
 abstract class MapSerializableTestMapBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, List<User>>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data?.map((k, dynamic v) => MapEntry(
         k,
         (v as List)
@@ -1096,16 +1209,16 @@ abstract class MapSerializableTestMapBody {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.MapSerializable,
 )
 abstract class NullableMapSerializableTestMapBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, List<User>>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data!.map(
         (k, dynamic v) => MapEntry(k, User.fromMap(v as Map<String, dynamic>)));
     return value;
@@ -1113,16 +1226,16 @@ abstract class NullableMapSerializableTestMapBody {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.MapSerializable,
 )
 abstract class MapSerializableTestMapBody2 {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, User>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data?.map(
         (k, dynamic v) => MapEntry(k, User.fromMap(v as Map<String, dynamic>)));
     return value;
@@ -1130,32 +1243,32 @@ abstract class MapSerializableTestMapBody2 {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.MapSerializable,
 )
 abstract class NullableMapSerializableTestMapBody2 {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, User>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = await compute(deserializeUser, _result.data!);
     return value;
 ''',
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class ComputeGenericCast {
-  @POST("/xx")
+  @POST('/xx')
   Future<User> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data == null
         ? null
         : await compute(deserializeUser, _result.data!);
@@ -1164,52 +1277,56 @@ abstract class ComputeGenericCast {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class NullableComputeGenericCast {
-  @POST("/xx")
+  @POST('/xx')
   Future<User?> getUser();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = await compute(
-        deserializeUserList, _result.data!.cast<Map<String, dynamic>>());
+      deserializeUserList,
+      _result.data!.cast<Map<String, dynamic>>(),
+    );
     return value;
 ''',
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class ComputeTestListBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<User>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data == null
         ? null
         : await compute(
-            deserializeUserList, _result.data!.cast<Map<String, dynamic>>());
+            deserializeUserList,
+            _result.data!.cast<Map<String, dynamic>>(),
+          );
     return value;
-''',
+  ''',
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class NullableComputeTestListBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<List<User>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
         (e) async => MapEntry(
             e.key,
@@ -1226,16 +1343,16 @@ You should create a new class to encapsulate the response.
   ],
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class ComputeTestMapBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, List<User>>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
         (e) async => MapEntry(
             e.key,
@@ -1252,16 +1369,16 @@ You should create a new class to encapsulate the response.
   ],
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class NullableComputeTestMapBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, List<User>>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
         (e) async => MapEntry(e.key,
             await compute(deserializeUser, e.value as Map<String, dynamic>)))));
@@ -1276,16 +1393,16 @@ You should create a new class to encapsulate the response.
   ],
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class ComputeTestMapBody2 {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, User>> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     var value = _result.data == null
         ? null
         : Map.fromEntries(await Future.wait(_result.data!.entries.map(
@@ -1304,16 +1421,16 @@ You should create a new class to encapsulate the response.
   ],
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class NullableComputeTestMapBody2 {
-  @GET("/xx")
+  @GET('/xx')
   Future<Map<String, User>?> getResult();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final queryParameters = <String, dynamic>{
       r'u': await compute(serializeUser, user)
     };
@@ -1321,63 +1438,63 @@ abstract class NullableComputeTestMapBody2 {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class ComputeQuery {
-  @GET("/xx")
+  @GET('/xx')
   Future<void> getResult(@Query('u') User user);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(await compute(serializeUser, user));
 ''',
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class ComputeQueries {
-  @GET("/xx")
+  @GET('/xx')
   Future<void> getResult(@Queries() User user);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = <String, dynamic>{};
     _data.addAll(await compute(serializeUser, user));
 ''',
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class TestComputeObjectBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<void> getResult(@Body() User user);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = await compute(serializeUserList, users);
 ''',
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class TestComputeObjectListBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<void> getResult(@Body() List<User> users);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = <String, dynamic>{};
     _data.addAll(user == null
         ? <String, dynamic>{}
@@ -1386,11 +1503,11 @@ abstract class TestComputeObjectListBody {
   contains: true,
 )
 @RestApi(
-  baseUrl: "https://httpbin.org/",
+  baseUrl: 'https://httpbin.org/',
   parser: Parser.FlutterCompute,
 )
 abstract class TestComputeNullableObjectBody {
-  @GET("/xx")
+  @GET('/xx')
   Future<void> getResult(@Body() User? user);
 }
 
@@ -1400,7 +1517,7 @@ abstract class TestComputeNullableObjectBody {
 )
 @RestApi()
 abstract class MapBodyShouldBeCleanTest {
-  @PUT("/")
+  @PUT('/')
   Future<void> update(@Body(nullToAbsent: true) Map<String, dynamic> data);
 }
 
@@ -1410,41 +1527,40 @@ abstract class MapBodyShouldBeCleanTest {
 )
 @RestApi()
 abstract class JsonSerializableBodyShouldBeCleanTest {
-  @PUT("/")
+  @PUT('/')
   Future<void> update(@Body(nullToAbsent: true) User obj);
 }
 
 @ShouldGenerate(
-    r'''
+  '''
     final _data = str;
-    await _dio.fetch<void>(_setStreamType<void>(
-        Options(''',
-    contains: true,
-    expectedLogItems: [
-      "String must provide a `toJson()` method which return a Map.\n"
-          "It is programmer\'s responsibility to make sure the String is properly serialized"
-    ])
+    await _dio.fetch<void>(_setStreamType<void>(Options(''',
+  contains: true,
+  expectedLogItems: [
+    "String must provide a `toJson()` method which return a Map.\nIt is programmer's responsibility to make sure the String is properly serialized"
+  ],
+)
 @RestApi()
 abstract class NonJsonSerializableBodyShouldNotBeCleanTest {
-  @PUT("/")
+  @PUT('/')
   Future<void> update(@Body() String str);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final _data = users.map((e) => e.toJson()).toList();
-    await _dio.fetch<void>(_setStreamType<void>(
-        Options(''',
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+  ''',
   contains: true,
 )
 @RestApi()
 abstract class ListBodyShouldNotBeCleanTest {
-  @PUT("/")
+  @PUT('/')
   Future<void> update(@Body() List<User> users);
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = GenericUser<dynamic>.fromJson(
       _result.data!,
       (json) => json as dynamic,
@@ -1455,12 +1571,12 @@ abstract class ListBodyShouldNotBeCleanTest {
 )
 @RestApi()
 abstract class DynamicInnerGenericTypeShouldBeCastedAsDynamic {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<dynamic>> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = GenericUser<List<User>>.fromJson(
       _result.data!,
       (json) => (json as List<dynamic>)
@@ -1473,12 +1589,12 @@ abstract class DynamicInnerGenericTypeShouldBeCastedAsDynamic {
 )
 @RestApi()
 abstract class DynamicInnerListGenericTypeShouldBeCastedRecursively {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<List<User>>> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data == null
         ? null
         : GenericUser<List<User>>.fromJson(
@@ -1493,12 +1609,12 @@ abstract class DynamicInnerListGenericTypeShouldBeCastedRecursively {
 )
 @RestApi()
 abstract class NullableDynamicInnerListGenericTypeShouldBeCastedRecursively {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<List<User>>?> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = GenericUser<User>.fromJson(
       _result.data!,
       (json) => User.fromJson(json as Map<String, dynamic>),
@@ -1509,12 +1625,12 @@ abstract class NullableDynamicInnerListGenericTypeShouldBeCastedRecursively {
 )
 @RestApi()
 abstract class DynamicInnerGenericTypeShouldBeCastedAsMap {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<User>> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = GenericUser<GenericUser<User>>.fromJson(
       _result.data!,
       (json) => GenericUser<User>.fromJson(
@@ -1528,12 +1644,12 @@ abstract class DynamicInnerGenericTypeShouldBeCastedAsMap {
 )
 @RestApi()
 abstract class NestGenericTypeShouldBeCastedRecursively {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<GenericUser<User>>> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data == null
         ? null
         : GenericUser<User>.fromJson(
@@ -1546,14 +1662,12 @@ abstract class NestGenericTypeShouldBeCastedRecursively {
 )
 @RestApi()
 abstract class NullableDynamicInnerGenericTypeShouldBeCastedAsMap {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<User>?> get();
 }
 
-
-
 @ShouldGenerate(
-  r'''
+  '''
     final value = GenericUser<User?>.fromJson(
       _result.data!,
       (json) =>
@@ -1565,12 +1679,12 @@ abstract class NullableDynamicInnerGenericTypeShouldBeCastedAsMap {
 )
 @RestApi()
 abstract class DynamicNullableInnerGenericTypeShouldBeCastedAsMap {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<User?>> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data == null
         ? null
         : GenericUser<User?>.fromJson(
@@ -1585,13 +1699,12 @@ abstract class DynamicNullableInnerGenericTypeShouldBeCastedAsMap {
 )
 @RestApi()
 abstract class NullableDynamicNullableInnerGenericTypeShouldBeCastedAsMap {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<User?>?> get();
 }
 
-
 @ShouldGenerate(
-  r'''
+  '''
     final value = GenericUser<List<double>>.fromJson(
       _result.data!,
       (json) =>
@@ -1603,12 +1716,12 @@ abstract class NullableDynamicNullableInnerGenericTypeShouldBeCastedAsMap {
 )
 @RestApi()
 abstract class DynamicInnerListGenericPrimitiveTypeShouldBeCastedRecursively {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<List<double>>> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data == null
         ? null
         : GenericUser<List<double>>.fromJson(
@@ -1623,12 +1736,12 @@ abstract class DynamicInnerListGenericPrimitiveTypeShouldBeCastedRecursively {
 )
 @RestApi()
 abstract class NullableDynamicInnerListGenericPrimitiveTypeShouldBeCastedRecursively {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUser<List<double>>?> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = GenericUserWithoutGenericArgumentFactories<dynamic>.fromJson(
         _result.data!);
     return value;
@@ -1637,12 +1750,12 @@ abstract class NullableDynamicInnerListGenericPrimitiveTypeShouldBeCastedRecursi
 )
 @RestApi()
 abstract class DynamicInnerGenericTypeShouldBeWithoutGenericArgumentType {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUserWithoutGenericArgumentFactories<dynamic>> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final value = _result.data == null
         ? null
         : GenericUserWithoutGenericArgumentFactories<dynamic>.fromJson(
@@ -1653,30 +1766,30 @@ abstract class DynamicInnerGenericTypeShouldBeWithoutGenericArgumentType {
 )
 @RestApi()
 abstract class NullableDynamicInnerGenericTypeShouldBeWithoutGenericArgumentType {
-  @PUT("/")
+  @PUT('/')
   Future<GenericUserWithoutGenericArgumentFactories<dynamic>?> get();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
     final String? _data = null;
   ''',
   contains: true,
 )
 @RestApi()
 abstract class NoBodyGeneratesNullBody {
-  @PUT("/")
+  @PUT('/')
   @NoBody()
   Future<GenericUser<dynamic>> puy();
 }
 
 mixin MethodInMixin {
-  @GET("https://httpbin.org/")
+  @GET('https://httpbin.org/')
   Future<void> someGet();
 }
 
 @ShouldGenerate(
-  r'''
+  '''
   @override
   Future<void> someGet() async {
   ''',
@@ -1686,21 +1799,21 @@ mixin MethodInMixin {
 abstract class NoMethods with MethodInMixin {}
 
 @ShouldGenerate(
-  r'''await _dio.fetch<Map<String, dynamic>?>''',
+  '''await _dio.fetch<Map<String, dynamic>?>''',
   contains: true,
 )
 @RestApi()
 abstract class NullableGenericCastFetch {
-  @GET("/")
+  @GET('/')
   Future<User?> get();
 }
 
 @ShouldGenerate(
-  r'''await _dio.fetch<Map<String, dynamic>>''',
+  '''await _dio.fetch<Map<String, dynamic>>''',
   contains: true,
 )
 @RestApi()
 abstract class GenericCastFetch {
-  @GET("/")
+  @GET('/')
   Future<User> get();
 }
