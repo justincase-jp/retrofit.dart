@@ -1411,11 +1411,11 @@ if (T != dynamic &&
                 innerReturnType != null) {
               blocks.add(refer('''
                     ${bodyName.displayName}.map((e) => e.toJson(${_getInnerJsonDeSerializableMapperFn(innerReturnType)})).toList()
-                  ''').assignFinal(_dataVar).statement);
+                  ''').assignFinal(dataVar).statement);
             } else {
               blocks.add(refer('''
                     ${bodyName.displayName}.map((e) => e.toJson()).toList()
-                  ''').assignFinal(_dataVar).statement);
+                  ''').assignFinal(dataVar).statement);
             }
             break;
           case retrofit.Parser.MapSerializable:
