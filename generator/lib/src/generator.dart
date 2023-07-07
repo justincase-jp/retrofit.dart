@@ -605,11 +605,11 @@ class RetrofitGenerator extends GeneratorForAnnotation<retrofit.RestApi> {
                       ? innerReturnType.typeArguments
                       : [];
                   final genericArgumentFactories =
-                  isGenericArgumentFactories(innerReturnType);
+                      isGenericArgumentFactories(innerReturnType);
                   if (typeArgs.isNotEmpty && genericArgumentFactories) {
                     mapperCode = refer(
                       '(dynamic i) => ${_displayString(innerReturnType)}.fromJson(i as Map<String,dynamic>,'
-                          '${_getInnerJsonSerializableMapperFn(innerReturnType)})',
+                      '${_getInnerJsonSerializableMapperFn(innerReturnType)})',
                     );
                   } else {
                     mapperCode = refer(
@@ -1504,24 +1504,40 @@ if (T != dynamic &&
           case retrofit.Parser.DartJsonMapper:
             final innerReturnType = _getResponseInnerType(bodyName.type);
             if (innerReturnType != null) {
-              final genericArgumentFactories = isGenericArgumentFactories(
-                  innerReturnType);
+              final genericArgumentFactories =
+                  isGenericArgumentFactories(innerReturnType);
               final typeArgs = innerReturnType is ParameterizedType
                   ? innerReturnType.typeArguments
                   : [];
               if (typeArgs.isNotEmpty && genericArgumentFactories) {
-                blocks.add(refer('''
+                blocks.add(
+                  declareFinal(dataVar)
+                      .assign(
+                        refer('''
                   ${bodyName.displayName}.map((e) => e.toJson(${_getInnerJsonDeSerializableMapperFn(innerReturnType)})).toList()
-                ''').assignFinal(_dataVar).statement);
+                  '''),
+                      )
+                      .statement,
+                );
+              } else {
+                blocks.add(
+                  declareFinal(dataVar)
+                      .assign(
+                        refer('''
+              ${bodyName.displayName}.map((e) => e.toJson()).toList()
+              '''),
+                      )
+                      .statement,
+                );
               }
             } else {
               blocks.add(
                 declareFinal(dataVar)
                     .assign(
-                  refer('''
+                      refer('''
             ${bodyName.displayName}.map((e) => e.toMap()).toList()
             '''),
-                )
+                    )
                     .statement,
               );
             }
