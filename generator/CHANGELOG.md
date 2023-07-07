@@ -1,4 +1,67 @@
 # Changelog
+## 7.0.8
+- Use `toJson()` instead of `.name` if enums have `toJson()`.
+
+## 7.0.7
+
+- Enums return types generated iterating over the enum values instead of calling `.toJson()` method
+- Enums as query parameters generated with `.name` instead of `toJson()`
+
+## 7.0.6
+
+- Fix DateTime.toIso8601String() issue #586
+## 7.0.3
+
+- Add support for analyzer 6.0.0
+
+## 7.0.2
+
+- Fixed generation of `DateTime` used as `@Query` parameters (now it is converted to `String` using `toIso8601String`)
+
+## 7.0.1
+
+- Rename `retrofit` to `retrofit_generator` in build.yaml fix for build_runner ^2.4.4
+- Add topics
+
+## 7.0.0
+
+- Fix deprecated warnings with analyzer 5.12.0
+- **[BREAKING CHANGE]** Require Dart >= 2.19 for new analyzer
+
+## 6.0.0
+
+- **[BREAKING CHANGE]** Update min Dart sdk to 2.18
+- Update example
+- Fix link in readme
+
+## 5.0.0+1
+
+- Support multi parameter types for headers
+- Make data null when it is empty
+
+## 5.0.0
+
+- Update dio to ^5.0.0
+
+## 4.1.2
+
+- add recommended dart lints to project
+
+## 4.1.1
+
+- fix error with code_builder version above 4.3.x
+
+## 4.1.0+1
+
+- use dart doc instead of dartdoc
+
+## 4.1.0
+
+- [BREAKING CHANGE] update analyzer to 4.7.x and Dart version to 2.17
+
+## 4.0.3
+
+- fix null compatibility
 
 ## 5.0.0
 

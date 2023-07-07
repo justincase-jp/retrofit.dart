@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:mock_web_server/mock_web_server.dart';
 import 'package:retrofit_example/example.dart';
@@ -8,50 +6,22 @@ import 'package:test/test.dart';
 import 'task_data.dart';
 
 late MockWebServer _server;
-late RestClient _client;
+late TasksRestClient _client;
 final _headers = {'Content-Type': 'application/json'};
 final dispatcherMap = <String, MockResponse>{};
 
 void main() {
   setUp(() async {
     _server = MockWebServer();
-    // _server.dispatcher = (HttpRequest request) async {
-    //   var res = dispatcherMap[request.uri.path];
-    //   if (res != null) {
-    //     return res;
-    //   }
-    //   return new MockResponse()..httpCode = 404;
-    // };
     await _server.start();
-    final dio = Dio();
+    final dio = Dio(BaseOptions(baseUrl: _server.url));
     dio.interceptors.add(LogInterceptor(responseBody: true));
     dio.interceptors.add(DateTimeInterceptor());
-    _client = RestClient(dio, baseUrl: _server.url);
+    _client = TasksRestClient(dio);
   });
 
   tearDown(() {
     _server.shutdown();
-  });
-
-  test('test tag list', () async {
-    print(jsonEncode(['tag1', 'tag2']));
-    _server.enqueue(
-        body: jsonEncode(['tag1', 'tag2']),
-        headers: {'Content-Type': 'application/json'});
-    final tasks = await _client.getTags();
-    expect(tasks, isNotNull);
-    expect(tasks.length, 2);
-  });
-
-  test('test stream tag list', () async {
-    print(jsonEncode(['tag1', 'tag2']));
-    _server.enqueue(
-        body: jsonEncode(['tag1', 'tag2']),
-        headers: {'Content-Type': 'application/json'});
-    final tasksStream = _client.getTagsAsStream();
-    final tasks = await tasksStream.first;
-    expect(tasks, isNotNull);
-    expect(tasks.length, 2);
   });
 
   test('test empty task list', () async {
@@ -115,12 +85,6 @@ void main() {
     await _client.deleteTask('id').then((it) {
       expect(null, null);
     });
-  });
-
-  test('test escaping character in query & headers', () async {
-    _server.enqueue(body: 'hello');
-    await _client.namedExample('apkKeyValue', 'hello', 'ggggg');
-    expect(true, true);
   });
 }
 

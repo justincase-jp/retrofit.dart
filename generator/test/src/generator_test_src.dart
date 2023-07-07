@@ -380,6 +380,88 @@ abstract class StreamReturnType {
   Stream<User> getUser();
 }
 
+enum TestEnum { A, B }
+
+@ShouldGenerate(
+  '''
+    final value = TestEnum.values.firstWhere(
+      (e) => e.name == _result.data,
+      orElse: () => throw ArgumentError(
+        'TestEnum does not contain value \${_result.data}',
+      ),
+    );
+    return value;
+''',
+  contains: true,
+)
+@RestApi()
+abstract class EnumReturnType {
+  @GET('/')
+  Future<TestEnum> getTestEnum();
+}
+
+enum EnumParam {
+  enabled,
+  disabled,
+}
+
+@ShouldGenerate(
+  '''
+    final queryParameters = <String, dynamic>{r'test': status?.name};
+''',
+  contains: true,
+)
+@RestApi()
+abstract class TestQueryParamEnum {
+  @GET('/test')
+  Future<void> getTest(@Query('test') EnumParam? status);
+}
+
+enum FromJsonEnum {
+  a,
+  b,
+  ;
+
+  factory FromJsonEnum.fromJson(Map<String, dynamic> json) => FromJsonEnum.a;
+}
+
+@ShouldGenerate(
+  '''
+    final value = FromJsonEnum.fromJson(_result.data!);
+    return value;
+''',
+  contains: true,
+)
+@RestApi()
+abstract class EnumFromJsonReturnType {
+  @GET('/')
+  Future<FromJsonEnum> getTestEnum();
+}
+
+enum ToJsonEnum {
+  plus(1),
+  minus(-1),
+  ;
+
+  const ToJsonEnum(this.value);
+
+  final int value;
+
+  int toJson() => value;
+}
+
+@ShouldGenerate(
+  '''
+    final queryParameters = <String, dynamic>{r'test': status?.toJson()};
+''',
+  contains: true,
+)
+@RestApi()
+abstract class TestQueryParamEnumToJson {
+  @GET('/test')
+  Future<void> getTest(@Query('test') ToJsonEnum? status);
+}
+
 @ShouldGenerate(
   '''
   Stream<User> getUser() async* {
@@ -556,6 +638,18 @@ class CustomObject {
   CustomObject(this.id);
 
   final String id;
+}
+
+@ShouldGenerate(
+  '''
+    final queryParameters = <String, dynamic>{r'test': date?.toIso8601String()};
+''',
+  contains: true,
+)
+@RestApi()
+abstract class TestQueryParamDateTime {
+  @GET('/test')
+  Future<void> getTest(@Query('test') DateTime? date);
 }
 
 @ShouldGenerate(
@@ -1579,9 +1673,11 @@ abstract class DynamicInnerGenericTypeShouldBeCastedAsDynamic {
   '''
     final value = GenericUser<List<User>>.fromJson(
       _result.data!,
-      (json) => (json as List<dynamic>)
-          .map<User>((i) => User.fromJson(i as Map<String, dynamic>))
-          .toList(),
+      (json) => json is List<dynamic>
+          ? json
+              .map<User>((i) => User.fromJson(i as Map<String, dynamic>))
+              .toList()
+          : List.empty(),
     );
     return value;
   ''',
@@ -1599,9 +1695,11 @@ abstract class DynamicInnerListGenericTypeShouldBeCastedRecursively {
         ? null
         : GenericUser<List<User>>.fromJson(
             _result.data!,
-            (json) => (json as List<dynamic>)
-                .map<User>((i) => User.fromJson(i as Map<String, dynamic>))
-                .toList(),
+            (json) => json is List<dynamic>
+                ? json
+                    .map<User>((i) => User.fromJson(i as Map<String, dynamic>))
+                    .toList()
+                : List.empty(),
           );
     return value;
   ''',
@@ -1707,8 +1805,9 @@ abstract class NullableDynamicNullableInnerGenericTypeShouldBeCastedAsMap {
   '''
     final value = GenericUser<List<double>>.fromJson(
       _result.data!,
-      (json) =>
-          (json as List<dynamic>).map<double>((i) => i as double).toList(),
+      (json) => json is List<dynamic>
+          ? json.map<double>((i) => i as double).toList()
+          : List.empty(),
     );
     return value;
   ''',
@@ -1726,9 +1825,9 @@ abstract class DynamicInnerListGenericPrimitiveTypeShouldBeCastedRecursively {
         ? null
         : GenericUser<List<double>>.fromJson(
             _result.data!,
-            (json) => (json as List<dynamic>)
-                .map<double>((i) => i as double)
-                .toList(),
+            (json) => json is List<dynamic>
+                ? json.map<double>((i) => i as double).toList()
+                : List.empty(),
           );
     return value;
   ''',
@@ -1814,6 +1913,22 @@ abstract class NullableGenericCastFetch {
 )
 @RestApi()
 abstract class GenericCastFetch {
+  @GET('/')
+  Future<User> get();
+}
+
+@ShouldGenerate(
+  '''
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+  ''',
+  contains: true,
+)
+@RestApi()
+abstract class CombineBaseUrls {
   @GET('/')
   Future<User> get();
 }
